@@ -1,0 +1,152 @@
+
+what is it for?
+'''
+Docker is a tool used to create, deploy, and run applications in isolated environments called containers.
+
+Containers package an application and all its dependencies, ensuring it runs consistently across different environments,
+whether on a developer's machine, in testing, or in production.
+
+Docker makes it easy to manage and scale applications without worrying about underlying system differences.
+'''
+
+
+initial setup
+1. download and install docker
+2. install docker for vscode 
+3. make sure wsl is installed on windows (windows subsystems for linux  )
+
+
+
+syntax and commands
+
+1. docker [command] [options]  / general  command form 
+    docker --version
+    docker pull <name> / from docker hub
+    docker run <name> 
+
+    options (flags)
+    -it:                 Run the container interactively (useful for getting a shell).
+    -d:                  Run the container in detached mode (in the background).
+    --name my_container: Name the container.
+
+    docker ps   / List running containers
+    docker stop <name>  / stop a running container
+    docker start <name> /start a stopped container
+    docker rm <name>  / remove a stopped container
+    docker rmi <name> / Remove an image from your local machine
+
+    docker build <name> / build an image from a Dockerfile
+    docker logs <container_name_or_id>  / View the logs of a container
+    docker exec -it <container_name_or_id> /bin/bash / Run a command inside a running container
+
+    docker-compose up / Start and run multi-container Docker applications defined in a docker-compose.yml file
+    docker-compose down  / Stop and remove containers, networks, and volumes defined in a docker-compose.yml file
+
+        
+    REMOVE COMMANDS
+    
+    Remove all images:  docker rmi $(docker images -q)
+
+    Force remove all images:  docker rmi -f $(docker images -q)
+        
+    Remove dangling images: docker image prune -f
+
+    Remove everything:  docker system prune -a --volumes
+
+docker files and folder structure
+
+# example using a flask app
+
+docker-flask-app/
+│
+├── Dockerfile           # Instructions to build the Docker image
+├── docker-compose.yml   # Defines services and how they interact
+├── app.py               # Your Flask application code
+├── requirements.txt     # List of Python dependencies
+└── README.md            # Optional: Project description and instructions
+
+
+multi-app-repo/
+│
+├── flask-app/
+│   ├── Dockerfile           # Dockerfile for the Flask app
+│   ├── app.py               # Flask application code
+│   ├── requirements.txt     # Dependencies for Flask app
+│   └── README.md            # Optional: Description for Flask app
+│
+├── pygame-app/
+│   ├── Dockerfile           # Dockerfile for the Pygame app
+│   ├── main.py              # Pygame application code
+│   ├── requirements.txt     # Dependencies for Pygame app
+│   └── README.md            # Optional: Description for Pygame app
+│
+├── docker-compose.yml       # (Optional) Orchestrate multiple services, if needed
+└── README.md                # Main project description and instructions
+
+
+the docker-compose.yml file 
+
+'''
+The docker-compose.yml file is a powerful way to define and manage multi-container applications.
+ It allows you to specify the configuration and relationships between different containers,
+  making it easier to manage complex applications with multiple services.
+   This file enables you to bring up your entire application stack with a single command,
+    simplifying both development and deployment.
+
+'''
+
+Key Sections of the File
+version:
+Specifies the version of the Docker Compose file format you’re using. Version 3 is common, but there are other versions with different features.
+
+services:
+This section lists each service (container) that will be part of your application.
+For each service, you can specify:
+    image: The Docker image to use (e.g., redis:alpine).
+    build: Path to a directory containing a Dockerfile, if you’re building an image locally.
+    ports: Port mapping from the host to the container (e.g., "5000:5000").
+    volumes: Volumes to mount (e.g., to persist data).
+    depends_on: Other services that must start before this one.
+
+volumes (Optional):
+This section is used to define volumes that can be shared across services or persisted beyond the life of the containers.
+Example: A database volume that persists data even if the container is restarted.
+
+networks (Optional):
+Define custom networks if you need more control over how services communicate with each other.
+ Otherwise, Docker Compose creates a default network automatically.
+
+
+practical example
+  flask app
+  numpy app
+  pygame app
+
+
+
+"ADVANCED" USAGE
+
+graphical apps such as pygame or matplotlib
+
+
+1. File Persistence and Volume Mounting
+Issue: The plot file (sine_wave_plot.png) is generated inside the Docker container,
+ but since Docker containers are ephemeral (they don't retain state once stopped or removed),
+  the file will not be accessible on your host machine unless you explicitly mount a volume or copy the file out of the container.
+
+Solution: Use Docker volumes to mount a directory from your host machine to the container,
+ ensuring that any files generated inside the container are saved on your host.
+
+
+
+dumb things i did
+
+1. tried having standard python libraries in the requirements.txt , such as sys
+
+
+
+other questions
+
+kubernetes?
+
+

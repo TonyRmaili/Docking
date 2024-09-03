@@ -10,8 +10,6 @@ COPY . /app
 # Install the required packages from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5000 available to the outside world
-EXPOSE 5000
-
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["python", "num_math.py"]
+ 
